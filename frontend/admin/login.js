@@ -1,3 +1,5 @@
+import { FRONTEND_URL, BACKEND_URL } from "../config.js";
+
 document.querySelector("form").addEventListener("submit", (event) => {
     event.preventDefault();  // Prevent form's default behavior
 
@@ -14,18 +16,9 @@ document.querySelector("form").addEventListener("submit", (event) => {
         return;
     }
     
-/*     new Promise((resolve) => {
-        // Simulate a successful login response
-        resolve({
-            ok: false,
-            json: () => Promise.resolve({
-                "status": false,
-                "message": "Internal Server Error"
-            })
-        });
-    }) */
+    console.log(BACKEND_URL);
     
-    fetch('http://localhost:3000/api/authenticate/admin/login', {
+    fetch(`${BACKEND_URL}/api/authenticate/admin/login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

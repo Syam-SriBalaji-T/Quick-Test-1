@@ -1,3 +1,5 @@
+import { FRONTEND_URL, BACKEND_URL } from "../config.js";
+
 document.querySelector("form").addEventListener("submit", (event) => {
     event.preventDefault();  // Prevent form's default behavior
 
@@ -20,7 +22,7 @@ document.querySelector("form").addEventListener("submit", (event) => {
     }
 
     // mockPromise(userEmail)
-    fetch('http://localhost:3000/api/authenticate/signup', {
+    fetch(`${BACKEND_URL}/api/authenticate/signup`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -55,44 +57,3 @@ document.querySelector("form").addEventListener("submit", (event) => {
         alert(error.message);
     });
 });
-
-/* 
-// Separate mockPromise function
-function mockPromise(email) {
-    return new Promise((resolve) => {
-        let mockResponse;
-
-        if (email === "exists@example.com") {
-            // Simulate email already exists
-            mockResponse = {
-                ok: false,
-                json: () => Promise.resolve({
-                    code: 1001,
-                    status: false,
-                    message: "Email id already exists"
-                })
-            };
-        } else if (email === "servererror@example.com") {
-            // Simulate internal server error
-            mockResponse = {
-                ok: false,
-                json: () => Promise.resolve({
-                    status: false,
-                    message: "Internal Server Error"
-                })
-            };
-        } else {
-            // Simulate successful signup
-            mockResponse = {
-                ok: true,
-                json: () => Promise.resolve({
-                    status: true,
-                    message: "User signed up successfully",
-                    token: "mock-jwt-token"
-                })
-            };
-        }
-
-        setTimeout(() => resolve(mockResponse), 500); // Simulate network delay
-    });
-} */

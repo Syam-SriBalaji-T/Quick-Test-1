@@ -1,12 +1,11 @@
+import { FRONTEND_URL, BACKEND_URL } from "../config.js";
+
 if(!localStorage.getItem("token")) {
     window.location.href = "./login.html";
 }
 
-// syam's update
-// added deleteTest api
-
 function displayData(data) {
-    draftsContainer = document.getElementById("draftsContainer") ;
+    let draftsContainer = document.getElementById("draftsContainer") ;
     for(let i=0;i<data.length;i++) {
         let element = document.createElement("div") ;
         element.className = "col-12 col-sm-6 col-md-4 col-lg-3 mt-2" ;
@@ -29,7 +28,9 @@ function displayData(data) {
                         <div class="col-12 col-md-6 d-grid mt-2 d-flex justify-content-center">
                             <button type="button" class="btn btn-info editButton" id=${data[i]._id} data-bs-toggle="modal" data-bs-target="#editTest">Edit Test</button>
                         </div>
-
+                        <div class="col-12 col-md-6 d-grid mt-2 d-flex justify-content-center">
+                            <button type="button" class="btn btn-danger" onclick="alert('This feature is under construction')" id=${data[i]._id} data-bs-toggle="modal" data-bs-target="#editTest">Delete Test</button>
+                        </div>
                     </div>
 
                 </div>
@@ -42,19 +43,19 @@ function displayData(data) {
 
 document.getElementById("draftsContainer").addEventListener('click', (e) => {
     if(e.target.classList.contains("editButton")) {
-        //window.location.href = `http://localhost:3000/api/admin/editTest/${e.target.id}` ;
-        window.open(`http://localhost:3000/api/admin/editTest/${e.target.id}`, '_blank');
+        window.open(`${BACKEND_URL}/api/admin/editTest/${e.target.id}`, '_blank');
     }
 })
 
 document.addEventListener("DOMContentLoaded", async () => {
-    fetch('http://localhost:3000/api/admin/getDraftTests')
+    fetch(`${BACKEND_URL}/api/admin/getDraftTests`)
     .then(response => response.json())
     .then(data => {
         console.log(data) ;
         displayData(data.data) ;
     })
     .catch(error => {
+        //console.log(error)
         window.location.href = "./ISE.html" ;
     });
 }) ;

@@ -1,10 +1,12 @@
+import { FRONTEND_URL, BACKEND_URL } from "../config.js";
+
 // alert(localStorage.getItem('token')) ;
 if(!localStorage.getItem('token')){
     location.href='ISE.html';
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-    fetch(`http://localhost:3000/api/user/getExams`, {
+    fetch(`${BACKEND_URL}/api/user/getExams`, {
         method: 'GET',
         headers: {
             'Authorization' : `Bearer ${localStorage.getItem('token')}`
@@ -54,8 +56,7 @@ document.getElementById("examsContainer").addEventListener("click", (e) => {
     if(e.target.classList.contains("startButtons")) {
         let examId = e.target.id ;
         console.log(examId) ;
-        // alert(`http://localhost:3000/api/user/authenticateForTest/${examId}`) ;
-        fetch(`http://localhost:3000/api/user/authenticateForTest/${examId}`, {
+        fetch(`${BACKEND_URL}/api/user/authenticateForTest/${examId}`, {
         method: 'GET',
         headers: {
             'Authorization' : `Bearer ${localStorage.getItem('token')}`
@@ -68,13 +69,12 @@ document.getElementById("examsContainer").addEventListener("click", (e) => {
             return res.json() ;
         })
         .then(data => {
-            // alert(data.data) ;
-            //window.location.href = `http://localhost:3000/api/user/takeTest/${data.data}` ;
-            window.open(`http://localhost:3000/api/user/takeTest/${data.data}`, "_blank");
+            window.open(`${BACKEND_URL}/api/user/takeTest/${data.data}`, "_blank");
         })
         .catch(err => {
             // console.log(error) ;
-            alert("Internal Server Error, unable to load the details. try refreshing the page")
+            alert("Internal Server Error, unable to load the details. try refreshing the page");
+            window.location.href = "ISE.html";
         });
     }
 })

@@ -1,9 +1,11 @@
+import { FRONTEND_URL, BACKEND_URL } from "../config.js";
+
 if(!localStorage.getItem('token')){
     location.href='ISE.html';
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    fetch(`http://localhost:3000/api/user/getPendingExams`, {
+    fetch(`${BACKEND_URL}/api/user/getPendingExams`, {
     method: 'GET',
     headers: {
         'Authorization' : `Bearer ${localStorage.getItem('token')}`
@@ -22,9 +24,10 @@ document.addEventListener("DOMContentLoaded", () => {
     .catch(err => {
         // console.log(error) ;
         alert("Internal Server Error, unable to load the details. try refreshing the page")
+        window.location.href = "ISE.html";
     });
 
-    fetch(`http://localhost:3000/api/user/getCompletedExams`, {
+    fetch(`${BACKEND_URL}/api/user/getCompletedExams`, {
     method: 'GET',
     headers: {
         'Authorization' : `Bearer ${localStorage.getItem('token')}`
@@ -44,6 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .catch(err => {
         // console.log(error) ;
         alert("Internal Server Error, unable to load the details. try refreshing the page")
+        window.location.href = "ISE.html";
     });
 })
 
@@ -101,7 +105,7 @@ document.getElementById("completedBlock").addEventListener("click", (e) => {
     if (e.target.classList.contains("startButtons")) {
         let examId = e.target.getAttribute("data-exam-id");
 
-        fetch(`http://localhost:3000/api/user/authenticateForTest/${examId}`, {
+        fetch(`${BACKEND_URL}/api/user/authenticateForTest/${examId}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -116,7 +120,7 @@ document.getElementById("completedBlock").addEventListener("click", (e) => {
         .then(data => {
             const iframe = document.getElementById(`analysisIframe-${examId}`);
             if (iframe) {
-                iframe.src = `http://localhost:3000/api/user/analysis/${data.data}`;
+                iframe.src = `${BACKEND_URL}/api/user/analysis/${data.data}`;
             }
 
             const modalElement = document.getElementById(`analysisModal-${examId}`);
@@ -154,6 +158,7 @@ document.getElementById("completedBlock").addEventListener("click", (e) => {
         .catch(err => {
             console.error(err);
             alert("Internal Server Error, unable to load the details. Try refreshing the page.");
+            window.location.href = "ISE.html";
         });
     }
 });
@@ -185,9 +190,7 @@ function displayPendingData(data) {
 document.getElementById("pendingBlock").addEventListener("click", (e) => {
     if(e.target.classList.contains("startButtons")) {
         let examId = e.target.id ;
-        // console.log(examId) ;
-        // alert(`http://localhost:3000/api/user/authenticateForTest/${examId}`) ;
-        fetch(`http://localhost:3000/api/user/authenticateForTest/${examId}`, {
+        fetch(`${BACKEND_URL}/api/user/authenticateForTest/${examId}`, {
             method: 'GET',
             headers: {
                 'Authorization' : `Bearer ${localStorage.getItem('token')}`
@@ -201,13 +204,12 @@ document.getElementById("pendingBlock").addEventListener("click", (e) => {
             return res.json() ;
         })
         .then(data => {
-            // alert(data.data) ;
-            window.open(`http://localhost:3000/api/user/takeTest/${data.data}`, '_blank');
-            //window.location.href = `http://localhost:3000/api/user/takeTest/${data.data}` ;
+            window.open(`${BACKEND_URL}/api/user/takeTest/${data.data}`, '_blank');
         })
         .catch(err => {
             // console.log(error) ;
-            alert("Internal Server Error, unable to load the details. try refreshing the page")
+            alert("Internal Server Error, unable to load the details. try refreshing the page");
+            window.location.href = "ISE.html";
         });
     }
 })

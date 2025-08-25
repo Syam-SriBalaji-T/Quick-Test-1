@@ -1,3 +1,5 @@
+import { FRONTEND_URL, BACKEND_URL } from "../config.js";
+
 let token = localStorage.getItem("token") ;
 // console.log(token) ;
 if(!localStorage.getItem('token')){
@@ -5,7 +7,7 @@ if(!localStorage.getItem('token')){
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    fetch(`http://localhost:3000/api/user/getProfile`, {
+    fetch(`${BACKEND_URL}/api/user/getProfile`, {
         method: 'GET',
         headers: {
             'Authorization' : `Bearer ${localStorage.getItem('token')}`
@@ -26,7 +28,8 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch(err => {
             // console.log(error) ;
-            alert("Internal Server Error, unable to load the details. try refreshing the page")
+            alert("Internal Server Error, unable to load the details. try refreshing the page");
+            window.location.href = "ISE.html";
         });
 })
 

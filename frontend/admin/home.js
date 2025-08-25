@@ -1,3 +1,5 @@
+import { FRONTEND_URL, BACKEND_URL } from "../config.js";
+
 if(!localStorage.getItem("token")) {
     window.location.href = "./login.html";
 }
@@ -36,7 +38,7 @@ function createStructure(data, container, status) {
 }}
 
 document.addEventListener("DOMContentLoaded", async () => {
-    fetch('http://localhost:3000/api/admin/getOngoingTests')
+    fetch(`${BACKEND_URL}/api/admin/getOngoingTests`)
     .then(response => response.json())
     .then(data => {
         // alert("Got the data successfully");
@@ -49,7 +51,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         window.location.href = "./ISE.html" ;
     });
 
-    fetch('http://localhost:3000/api/admin/getDisabledTests')
+    fetch(`${BACKEND_URL}/api/admin/getDisabledTests`)
     .then(response => response.json())
     .then(data => {
         // alert("Got the data successfully");
@@ -66,7 +68,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Delegate clicks from ongoingExamContainer
     document.getElementById("ongoingExamContainer").addEventListener("click", function (e) {
         if (e.target && e.target.classList.contains("statusChangingButton")) {
-            fetch(`http://localhost:3000/api/admin/disableTest/${e.target.id}`)
+            fetch(`${BACKEND_URL}/api/admin/disableTest/${e.target.id}`)
             .then(response => {
                 if(response.status != 200) {
                     alert("Internal Server Error!! try later")
@@ -85,7 +87,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Delegate clicks from expiredExamContainer
     document.getElementById("expiredExamContainer").addEventListener("click", function (e) {
         if (e.target && e.target.classList.contains("statusChangingButton")) {
-            fetch(`http://localhost:3000/api/admin/enableTest/${e.target.id}`)
+            fetch(`${BACKEND_URL}/api/admin/enableTest/${e.target.id}`)
             .then(response => {
                 if(response.status != 200) {
                     alert("Internal Server Error!! try later")

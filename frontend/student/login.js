@@ -1,3 +1,5 @@
+import { FRONTEND_URL, BACKEND_URL } from "../config.js";
+
 document.querySelector("form").addEventListener("submit", (event) => {
     event.preventDefault();  // Prevent form's default behavior
 
@@ -26,7 +28,7 @@ document.querySelector("form").addEventListener("submit", (event) => {
         });
     }) */
 
-    fetch('http://localhost:3000/api/authenticate/login', {
+    fetch(`${BACKEND_URL}/api/authenticate/login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
