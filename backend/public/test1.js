@@ -66,6 +66,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 document.getElementById(`${data[i].questionId}button`).classList.add('flagged') ;
                 document.getElementById(`${data[i].questionId}button`).classList.add('btn-success') ;
             }
+            
             document.getElementById(`section${0}question${0}button`).childNodes[1].classList.add('active');
         }
         console.log(questionStatus) ;
@@ -94,8 +95,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         // console.log(error) ;
         alert("Internal Server Error, unable to load the details. try refreshing the page")
     });
-
-
 })
 
 document.getElementById("questionBlock").addEventListener("click", (e) => {
@@ -242,34 +241,44 @@ function finalSubmitFunction() {
     });
 }
 
-//document.getElementById("section0Questions").style.display = "block" ;
 document.getElementById("section0Questions").classList.remove('d-none');
 document.getElementById("section0Questions").classList.add('d-flex');
 let section = 0 ;
 let question = 0 ;
 
-document.getElementById("previous").addEventListener('click', async() => {
+document.getElementById("previous").addEventListener("click", async() => {
+    document.getElementById(`section${section}question${question}button`).childNodes[1].classList.remove('active');
+
     if(question == 0) {
         document.getElementById(`section${section}question${question}button`).childNodes[1].classList.add('active');
-        return 0 ;
+        return;
     }
-    document.getElementById(`section${section}question${question}`).style.display = "none" ;
-    question = question - 1  ;
-    displayButton(section, question) ;
-    displayQuestion() ;
-})
+
+    document.getElementById(`section${section}question${question}`).style.display = "none";
+    question = question - 1;
+
+    document.getElementById(`section${section}question${question}button`).childNodes[1].classList.add('active');
+
+    displayButton(section, question);
+    displayQuestion();
+});
 
 document.getElementById("next").addEventListener("click", async() => {
-    let x = document.getElementById(`section${section}Questions`).childElementCount ;
-    if(question == x-1) {
+    let x = document.getElementById(`section${section}Questions`).childElementCount;
+    document.getElementById(`section${section}question${question}button`).childNodes[1].classList.remove('active');
+
+    if(question == x - 1) {
         document.getElementById(`section${section}question${question}button`).childNodes[1].classList.add('active');
-        return ;
+        return;
     }
-    document.getElementById(`section${section}question${question}`).style.display = "none" ;
-    question = question + 1 ;
-    displayButton(section, question) ;
-    displayQuestion() ;
-})
+
+    document.getElementById(`section${section}question${question}`).style.display = "none";
+    question = question + 1;
+
+    document.getElementById(`section${section}question${question}button`).childNodes[1].classList.add('active');
+    displayButton(section, question);
+    displayQuestion();
+});
 
 document.getElementById("markforreview").addEventListener('click', async(req, res) => {
     let question_id = document.getElementById(`section${section}question${question}optionsblock`).parentElement.id ;
@@ -359,17 +368,20 @@ function displayQuestion() {
     document.getElementById("question_number").innerText = `Question-${question+1}` ;
 }
 
-
 document.getElementById("questionButtonsBlock").addEventListener("click", async(e) => {
-    if (e.target.classList.contains("questionButtons")){
-        let str = e.target.parentElement.id ;
-        document.getElementById(`section${section}question${question}`).style.display = "none" ;
-        await displayButton(section, question) ;
+    if (e.target.classList.contains("questionButtons")) {
+        document.getElementById(`section${section}question${question}button`).childNodes[1].classList.remove('active');
+
+        let str = e.target.parentElement.id;
+        document.getElementById(`section${section}question${question}`).style.display = "none";
+        await displayButton(section, question);
         section = parseInt(str.split("section")[1].split("question")[0]);
         question = parseInt(str.split("question")[1].split("button")[0]);
+
+        document.getElementById(`section${section}question${question}button`).childNodes[1].classList.add('active');
         displayQuestion();
     }
-})
+});
 
 async function displayButton(section, question) {
     let question_id = document.getElementById(`section${section}question${question}optionsblock`).parentElement.id ;
@@ -396,29 +408,32 @@ async function displayButton(section, question) {
 }
 
 document.getElementById("sectionsBlock").addEventListener("click", (e) => {
-if (e.target.classList.contains("sectionButtons")) {
-    let str = e.target.id ;
-    const sectionNumber = parseInt(str.slice(7));
+    if (e.target.classList.contains("sectionButtons")) {
+        let str = e.target.id;
+        const sectionNumber = parseInt(str.slice(7));
 
-    document.getElementById(`section${section}`).classList.remove('btn-primary');
-    document.getElementById(`section${section}`).classList.add('btn-secondary');
-    
-    document.getElementById(`section${section}Questions`).classList.remove('d-flex');
-    document.getElementById(`section${section}Questions`).classList.add('d-none');
+        document.getElementById(`section${section}`).classList.remove('btn-primary');
+        document.getElementById(`section${section}`).classList.add('btn-secondary');
 
-    document.getElementById(`section${section}question${question}`).style.display = "none" ;
-    section = parseInt(str.slice(7));
-    question = 0 ;
-    
-    document.getElementById(`section${section}`).classList.remove('btn-secondary');
-    document.getElementById(`section${section}`).classList.add('btn-primary');
-    
-    document.getElementById(`section${section}Questions`).classList.remove('d-none');
-    document.getElementById(`section${section}Questions`).classList.add('d-flex');
-    
-    displayQuestion() ;
-}
-})
+        document.getElementById(`section${section}Questions`).classList.remove('d-flex');
+        document.getElementById(`section${section}Questions`).classList.add('d-none');
+
+        document.getElementById(`section${section}question${question}button`).childNodes[1].classList.remove('active');
+
+        document.getElementById(`section${section}question${question}`).style.display = "none";
+        section = parseInt(str.slice(7));
+        question = 0;
+
+        document.getElementById(`section${section}`).classList.remove('btn-secondary');
+        document.getElementById(`section${section}`).classList.add('btn-primary');
+
+        document.getElementById(`section${section}Questions`).classList.remove('d-none');
+        document.getElementById(`section${section}Questions`).classList.add('d-flex');
+
+        document.getElementById(`section${section}question${question}button`).childNodes[1].classList.add('active');
+        displayQuestion();
+    }
+});
 
 document.getElementById("reset").addEventListener("click", () => {
     resetFunction(section, question) ;
