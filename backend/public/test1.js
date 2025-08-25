@@ -9,7 +9,7 @@ let questionStatus = new Map() ;
 
 document.addEventListener("DOMContentLoaded", async () => {
     // alert(token);
-    fetch(`http://localhost:3000/api/user/getOptions/${token}`, {
+    fetch(`${BACKEND_URL}/api/user/getOptions/${token}`, {
     method: 'GET',
     headers: {
         'Authorization' : `Bearer ${localStorage.getItem('token')}`
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         alert("Internal Server Error, unable to load the details. try refreshing the page")
     });
     
-    fetch(`http://localhost:3000/api/user/getButtonsStatus/${token}`, {
+    fetch(`${BACKEND_URL}/api/user/getButtonsStatus/${token}`, {
     method: 'GET',
     headers: {
         'Authorization' : `Bearer ${localStorage.getItem('token')}`
@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         alert("Internal Server Error, unable to load the details. try refreshing the page")
     });
     
-    fetch(`http://localhost:3000/api/user/getTimer/${token}`, {
+    fetch(`${BACKEND_URL}/api/user/getTimer/${token}`, {
     method: 'GET',
     headers: {
         'Authorization' : `Bearer ${localStorage.getItem('token')}`
@@ -125,7 +125,7 @@ document.getElementById("questionBlock").addEventListener("click", (e) => {
             z = 3 ;
         }
         questionStatus.set(question_id, z) ;
-        fetch(`http://localhost:3000/api/user/submitAnswer/${token}/${question_id}`, {
+        fetch(`${BACKEND_URL}/api/user/submitAnswer/${token}/${question_id}`, {
             method: 'POST',
             headers: {
             'Content-Type': 'application/json' ,
@@ -193,7 +193,7 @@ function setTimer(time) {
 
 function updatetime(hours, minutes) {
     let timeRemaining = hours * 60 + minutes ;
-    fetch(`http://localhost:3000/api/user/updateTimer/${token}`, {
+    fetch(`${BACKEND_URL}/api/user/updateTimer/${token}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json' ,
@@ -219,7 +219,7 @@ document.getElementById("submitButton").addEventListener("click", ()=> {
 })
 
 function finalSubmitFunction() {
-    fetch(`http://localhost:3000/api/user/submitTest/${token}`, {
+    fetch(`${BACKEND_URL}/api/user/submitTest/${token}`, {
     method: 'GET',
     headers: {
         'Authorization' : `Bearer ${localStorage.getItem('token')}`
@@ -310,7 +310,7 @@ document.getElementById("markforreview").addEventListener('click', async(req, re
     // alert(x) ;
     questionStatus.set(question_id, x) ;
 
-    fetch(`http://localhost:3000/api/user/markforreview/${token}/${question_id}`, {
+    fetch(`${BACKEND_URL}/api/user/markforreview/${token}/${question_id}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json' ,
@@ -454,7 +454,7 @@ function resetFunction(givenSection, givenQuestion) {
     
     let question_id = document.getElementById(`section${givenSection}question${givenQuestion}optionsblock`).parentElement.id ;
     answerMap.set(question_id, value) ;
-    fetch(`http://localhost:3000/api/user/submitAnswer/${token}/${question_id}`, {
+    fetch(`${BACKEND_URL}/api/user/submitAnswer/${token}/${question_id}`, {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json' ,
