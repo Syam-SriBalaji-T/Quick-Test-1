@@ -22,6 +22,7 @@ const __dirname = dirname(__filename);
 // ----------------- CORS -----------------
 const allowedOrigins = [
   "https://quick-test-platform.vercel.app",
+  "https://quick-test-platform.netlify.app/",
   "http://localhost:4000",
   "http://localhost:3000"
 ];
