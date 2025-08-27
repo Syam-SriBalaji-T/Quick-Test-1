@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 import open from "open";
 
 const app = express();
-const PORT = process.env.FRONTEND_PORT || 4000;
+const PORT = 4000;
 
 // Fix __dirname for ES Modules
 const __filename = fileURLToPath(import.meta.url);
@@ -20,7 +20,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Frontend server running at http://localhost:${PORT}`);
-  // Open the browser automatically
-  //open(`http://localhost:${PORT}`);
+  console.log(`Frontend server running at http://localhost:${PORT}`);;
 });
