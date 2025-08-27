@@ -199,6 +199,8 @@ router.get('/testAnalysis/:testid', async (req, res) => {
             });
         }
 
+        console.log(data);
+
         // Fetch user names for all unique userIds
         const userIds = [...new Set(data.map(item => item.userId))]; // unique userIds
         const users = await User.find({ _id: { $in: userIds } }, { name: 1 });
@@ -213,13 +215,17 @@ router.get('/testAnalysis/:testid', async (req, res) => {
         const participants = data
             .map(item => ({
                 name: userMap[item.userId] || "Unknown User",
-                marksScored: item.marksScored
+                marksScored: item.marksScored !== undefined ? item.marksScored : 0
             }))
             .sort((a, b) => b.marksScored - a.marksScored);
 
+        // Safely get totalMarks from any valid attempt
+        const validTotal = data.find(item => item.totalMarks !== undefined);
+        const totalMarks = validTotal ? validTotal.totalMarks : 0;
+
+
         // Calculate statistics
         const totalParticipants = participants.length;
-        const totalMarks = data[0].totalMarks; // same for all attempts
         const totalMarksScored = participants.reduce((acc, curr) => acc + curr.marksScored, 0);
         const averageMarks = parseFloat((totalMarksScored / totalParticipants).toFixed(2));
         const maxMarks = Math.max(...participants.map(p => p.marksScored));
@@ -246,29 +252,6 @@ router.get('/testAnalysis/:testid', async (req, res) => {
         });
     }
 });
-
-
-/* router.get('/testAnalysis/:testid', async(req, res) => {
-    let testid = req.params.testid ;
-    console.log(testid) ;
-    try {
-        const data = await Attempts.find({examId : testid, completed : true}) ;
-        console.log(data) ;
-
-        return res.status(200).json({
-            status : true, 
-            message : "got the details"
-            // send the details here
-        })
-    }
-    catch(error) {
-        console.log(error) ;
-        return res.status(400).json({
-            status : false, 
-            message : "Internal Server Error"
-        })
-    }
-}) */
 
 router.post('/saveQuestion/:examId/:subject/:qnumber', async(req, res) => {
     let {examId, subject, qnumber} = req.params ;
