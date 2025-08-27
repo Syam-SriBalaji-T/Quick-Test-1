@@ -5,6 +5,29 @@ if(!localStorage.getItem('token')){
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+
+    const pendingParent = document.getElementById("pendingBlock");
+    const completedParent = document.getElementById("completedBlock");
+
+    // Show loading spinner initially
+    pendingParent.innerHTML = `
+        <div class="text-center my-4" id="pendingLoading">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2 fw-semibold">Loading pending tests...</p>
+        </div>
+    `;
+
+    completedParent.innerHTML = `
+        <div class="text-center my-4" id="completedLoading">
+            <div class="spinner-border text-secondary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2 fw-semibold">Loading completed tests...</p>
+        </div>
+    `;
+
     fetch(`${BACKEND_URL}/api/user/getPendingExams`, {
     method: 'GET',
     headers: {
@@ -52,53 +75,60 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 function displayCompletedData(data) {
-    console.log(data) ;
-    let parent = document.getElementById("completedBlock") ;
-    for(let i=0;i<data.length;i++) {
-        let element = document.createElement("div") ;
-        element.className = "col-12 col-sm-6 col-md-4 col-lg-3 mt-2" ;
+    const parent = document.getElementById("completedBlock");
+    parent.innerHTML = ""; // Remove loader
+
+    if (!data || data.length === 0) {
+        parent.innerHTML = `
+            <div class="text-center my-4 text-muted fw-bold">
+                No completed tests
+            </div>
+        `;
+        return;
+    }
+
+    for (let i = 0; i < data.length; i++) {
+        let element = document.createElement("div");
+        element.className = "col-12 col-sm-6 col-md-4 col-lg-3 mt-2";
         element.innerHTML = `
-        <div class="card">
-            <h1 class="card-title bg-secondary text-white rounded">${data[i].examTitle}</h1>
-            <div class="card-body">
+            <div class="card">
+                <h1 class="card-title bg-secondary text-white rounded">${data[i].examTitle}</h1>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="d-flex justify-content-center col-12 mt-3">
+                            <button 
+                                class="btn btn-warning view-analysis-btn startButtons" 
+                                data-exam-id="${data[i].examId}" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#analysisModal-${data[i].examId}">
+                                View Statistics
+                            </button>
+                        </div>
 
-                <div class="row">
-                    <div class="d-flex justify-content-center col-12 mt-3">
-                        <button 
-                            class="btn btn-warning view-analysis-btn startButtons" 
-                            data-exam-id="${data[i].examId}" 
-                            data-bs-toggle="modal" 
-                            data-bs-target="#analysisModal-${data[i].examId}">
-                            View Statistics
-                        </button>
-                    </div>
-
-                    <!-- Modal with dynamic ID -->
-                    <div class="modal fade" id="analysisModal-${data[i].examId}" tabindex="-1" aria-labelledby="analysisModalLabel-${data[i].examId}" aria-hidden="true">
-                        <div class="modal-dialog modal-xl" style="max-width: 90%;">
-                            <div class="modal-content" style="height: 90vh;">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="analysisModalLabel-${data[i].examId}">Analysis Report</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-
-                                <div class="modal-body p-0" style="height: calc(100% - 112px);"> <!-- reduce height for footer -->
-                                    <iframe id="analysisIframe-${data[i].examId}" src="" style="width:100%; height:100%; border:0;"></iframe>
-                                </div>
-
-                                <div class="modal-footer d-flex justify-content-center align-items-center">
-                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                        <div class="modal fade" id="analysisModal-${data[i].examId}" tabindex="-1" aria-labelledby="analysisModalLabel-${data[i].examId}" aria-hidden="true">
+                            <div class="modal-dialog modal-xl" style="max-width: 90%;">
+                                <div class="modal-content" style="height: 90vh;">
+                                    <div class="modal-header bg-secondary">
+                                        <h5 class="modal-title text-white" id="analysisModalLabel-${data[i].examId}">Analysis Report</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body p-0" style="height: calc(100% - 112px);">
+                                        <iframe id="analysisIframe-${data[i].examId}" src="" style="width:100%; height:100%; border:0;"></iframe>
+                                    </div>
+                                    <div class="modal-footer d-flex justify-content-center align-items-center">
+                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        ` ; 
-        parent.appendChild(element) ;
+        `;
+        parent.appendChild(element);
     }
 }
+
 
 // View Statistics button
 document.getElementById("completedBlock").addEventListener("click", (e) => {
@@ -164,17 +194,26 @@ document.getElementById("completedBlock").addEventListener("click", (e) => {
 });
 
 function displayPendingData(data) {
-    console.log(data) ;
-    let parent = document.getElementById("pendingBlock") ;
-    for(let i=0;i<data.length;i++) {
-        let element = document.createElement("div") ;
-        element.className = "col-12 col-sm-6 col-md-4 col-lg-3 mt-2" ;
+    const parent = document.getElementById("pendingBlock");
+    parent.innerHTML = ""; // Remove loader
+
+    if (!data || data.length === 0) {
+        parent.innerHTML = `
+            <div class="text-center my-4 text-muted fw-bold">
+                No pending tests
+            </div>
+        `;
+        return;
+    }
+
+    for (let i = 0; i < data.length; i++) {
+        let element = document.createElement("div");
+        element.className = "col-12 col-sm-6 col-md-4 col-lg-3 mt-2";
         element.innerHTML = `
             <div class="card">
                 <h1 class="card-title bg-primary text-white rounded">${data[i].examTitle}</h1>
                 <div class="card-body">
-                    <p>Time left : ${data[i].timeRemaining} </p>
-
+                    <p>Time left : ${data[i].timeRemaining}</p>
                     <div class="row">
                         <div class="d-flex justify-content-center col-12 mt-3">
                             <button class="btn btn-primary startButtons" id="${data[i].examId}">Resume Test</button>
@@ -182,10 +221,11 @@ function displayPendingData(data) {
                     </div>
                 </div>
             </div>
-        ` ; 
-        parent.appendChild(element) ;
+        `;
+        parent.appendChild(element);
     }
 }
+
 
 document.getElementById("pendingBlock").addEventListener("click", (e) => {
     if(e.target.classList.contains("startButtons")) {
