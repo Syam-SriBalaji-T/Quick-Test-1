@@ -18,7 +18,7 @@ const __dirname = path.dirname(__filename);
 const app = express();
 
 // ----------------- CORS -----------------
-const allowedOrigins = ["http://localhost:4000", "http://localhost:3000"];
+const allowedOrigins = ["https://quick-test-platform.vercel.app/", "http://localhost:4000", "http://localhost:3000"];
 
 app.use(cors({
   origin: function (origin, callback) {
