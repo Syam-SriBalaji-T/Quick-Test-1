@@ -11,8 +11,6 @@ const studentRoute = require("./routes/studentroutes.js");
 
 dotenv.config();
 
-const __dirname = __dirname; // In CommonJS, __dirname is already available
-
 const app = express();
 
 // ----------------- CORS -----------------
