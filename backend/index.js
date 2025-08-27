@@ -43,6 +43,13 @@ app.set("views", path.join(__dirname, "views"));
 // This serves everything in /backend/public at http://localhost:3000/
 app.use(express.static(path.join(__dirname, "public")));
 
+app.get('/', (req, res) => {
+  res.send({
+    activeStatus: true,
+    error: false
+  })
+})
+
 // (Optional) if you want to serve frontend separately
 app.use("/frontend", express.static(path.join(__dirname, "..", "frontend")));
 
