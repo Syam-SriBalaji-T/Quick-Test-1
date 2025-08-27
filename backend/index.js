@@ -1,17 +1,23 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const path = require("path");
-const cors = require("cors");
-const dotenv = require("dotenv");
+import express from "express";
+import mongoose from "mongoose";
+import path from "path";
+import cors from "cors";
+import dotenv from "dotenv";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 
-const authentication = require("./routes/Authentication.js");
-const exam = require("./routes/examsetting.js");
-const adminRoutes = require("./routes/adminroutes.js");
-const studentRoute = require("./routes/studentroutes.js");
+import authentication from "./routes/Authentication.js";
+import exam from "./routes/examsetting.js";
+import adminRoutes from "./routes/adminroutes.js";
+import studentRoute from "./routes/studentroutes.js";
 
 dotenv.config();
 
 const app = express();
+
+// ----------------- Fix __dirname in ESM -----------------
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // ----------------- CORS -----------------
 const allowedOrigins = [
