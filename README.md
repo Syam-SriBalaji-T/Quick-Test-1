@@ -2,7 +2,7 @@
 
 **Quick Test** is a simple and efficient platform designed for **students** and **teaching organizations** to conduct, manage, and analyze tests seamlessly.
 
-🌐 **Live Demo:** [Snap List on Netlify](https://quick-test-platform.netlify.app/)
+🌐 **Live Demo:** [QuickTest on Netlify](https://quick-test-platform.netlify.app/)
 
 ---
 
